@@ -1,0 +1,5 @@
+node_modules/
+basic_example_bundle.js.LICENSE.txt
+package-lock.json
+examples-vite/public/sql-wasm.wasm
+examples-vite/dist/

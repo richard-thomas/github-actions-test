@@ -60,7 +60,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Vite outputs to 'dist' by default
+          path: './examples-vite/dist' # Vite outputs to 'dist' by default
 
       - name: Deploy to GitHub Pages
         id: deployment

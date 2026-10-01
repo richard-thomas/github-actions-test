@@ -44,7 +44,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        # 'npm install' obeys your package.json semantic version ranges
+        # '--no-audit --no-fund' speeds up the build process
+        # If want to restrict to package-lock.json, could use "npm ci"
+        run: npm install --no-audit --no-fund
 
       - name: Extract sqljs WASM from node_modules
         run: npm run-script sql-install

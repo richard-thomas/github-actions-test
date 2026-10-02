@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/reusable-vite-build.yml
     with:
       # Pass a blank forward slash so Vite compiles assets with absolute/relative flexibility
-      base_path: /
+      base_path: './'
 
   # Job 2: Download the built artifact and deploy it
   deploy-preview:

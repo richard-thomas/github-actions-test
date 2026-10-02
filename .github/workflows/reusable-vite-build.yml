@@ -7,6 +7,10 @@ on:
         description: 'The base path for the Vite build'
         required: true
         type: string
+      working_directory:
+        required: false
+        type: string
+        default: './examples-vite' # Define it as a default input
 jobs:
   vite-build:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
     # Sets the default folder for ALL run steps in this job
     defaults:
       run:
-        working-directory: ./examples-vite
+        working-directory: ${{ inputs.working_directory }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,5 +48,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vite-dist-artifact
-          path: dist/
+          path: ${{ inputs.working_directory }}/dist/
           retention-days: 1 # Kept temporarily just for the workflow lifecycle

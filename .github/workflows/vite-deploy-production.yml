@@ -14,16 +14,19 @@ permissions:
 
 jobs:
   # Job 1: Build using the reusable workflow
-  build-site:
+  build-prod-artifact:
     uses: ./.github/workflows/reusable-vite-build.yml
     with:
       base_path: /${{ github.event.repository.name }}/examples-vite/
 
   # Job 2: Download and deploy to the production folder
   deploy-prod:
-    needs: build-site
+    needs: build-prod-artifact
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:

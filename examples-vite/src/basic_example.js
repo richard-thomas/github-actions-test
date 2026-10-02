@@ -36,7 +36,7 @@ if (!ol_proj_get(displayProjection)) {
 const outputElem = document.getElementById('report');
 
 outputElem.innerHTML +=
-    '<p>(Vite build test 1)</p>' +
+    '<p>(Vite build test PR tweak 1)</p>' +
     '<p>Loading OGC GeoPackage file (' + gpkgFile +
     ') and reprojecting sources (to ' + displayProjection + ')...</p>';
 

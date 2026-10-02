@@ -1,0 +1,44 @@
+name: Cleanup Preview Deployment
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write      # Required to remove the preview files from the gh-pages branch
+  pull-requests: write # Required to remove or update the preview link comment on the PR
+
+# Use concurrency to avoid collision if multiple PRs close at once
+concurrency:
+  group: preview-pages-${{ github.ref }}
+
+jobs:
+  clean-up:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the gh-pages branch instead of main
+      - name: Checkout gh-pages Branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      # 2. Delete the target folder and push the empty space back upstream
+      - name: Clean up PR preview folder
+        run: |
+          # Remove the PR directory matching what rajyan/preview-pages created
+          rm -rf preview/pr-${{ github.event.number }}
+
+          # Configure a standard Git bot profile
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Stage the deletion
+          git add .
+
+          # Only commit and push if there were files to actually delete
+          if ! git diff --cached --quiet; then
+            git commit -m "Clean preview for pr-${{ github.event.number }}"
+            git push origin gh-pages
+          else
+            echo "No preview directory found to delete."
+          fi

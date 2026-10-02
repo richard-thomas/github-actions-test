@@ -41,7 +41,7 @@ jobs:
           VITE_APP_BASE_PATH: ${{ inputs.base_path }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vite-dist-artifact
           path: dist/

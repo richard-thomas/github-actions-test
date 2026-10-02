@@ -31,10 +31,6 @@ export default defineConfig({
   // mpa allows vite server to return 404 instead of fallback to index.html
   appType: 'mpa',
 
-  // Dynamically set the absolute base URL based on the deployment type
-  // For non-preview, make project root relative to dist folder (allows simple deployment)
-  // (TBD: add preview build action)
-  base: process.env.IS_PREVIEW === 'true'
-    ? '/github-actions-test/preview/'
-    : './',
+  // Dynamically set base path based on GitHub Actions environment variable
+  base: process.env.VITE_APP_BASE_PATH || '/',
 });

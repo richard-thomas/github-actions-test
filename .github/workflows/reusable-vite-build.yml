@@ -1,0 +1,48 @@
+name: Reusable Vite Build
+
+on:
+  workflow_call:
+    inputs:
+      base_path:
+        description: 'The base path for the Vite build'
+        required: true
+        type: string
+jobs:
+  vite-build:
+    runs-on: ubuntu-latest
+
+    # Sets the default folder for ALL run steps in this job
+    defaults:
+      run:
+        working-directory: ./examples-vite
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        # 'npm install' obeys your package.json semantic version ranges
+        # '--no-audit --no-fund' speeds up the build process
+        # If want to restrict to package-lock.json, could use "npm ci"
+        run: npm install --no-audit --no-fund
+
+      - name: Extract sqljs WASM from node_modules
+        run: npm run-script sql-install
+
+      - name: Build site
+        run: |
+          echo "💡 Vite build with assets set for base path: ${{ inputs.base_path }}"
+          npm run build
+        env:
+          VITE_APP_BASE_PATH: ${{ inputs.base_path }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: vite-dist-artifact
+          path: dist/
+          retention-days: 1 # Kept temporarily just for the workflow lifecycle

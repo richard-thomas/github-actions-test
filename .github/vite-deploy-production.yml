@@ -1,0 +1,39 @@
+name: Production Vite (Build &) Deployment
+
+on:
+  # Triggers when a Pull Request targeting 'main' is closed
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  # Trigger from manual button in the GitHub Actions UI
+  workflow_dispatch:
+
+permissions:
+  contents: write # Required for push to gh-pages
+
+jobs:
+  # Job 1: Build using the reusable workflow
+  build-site:
+    uses: ./.github/workflows/reusable-vite-build.yml
+    with:
+      base_path: /${{ github.event.repository.name }}/examples-vite/
+
+  # Job 2: Download and deploy to the production folder
+  deploy-prod:
+    needs: build-site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vite-dist-artifact
+          path: dist
+
+      - name: Deploy to GitHub Pages Production Folder
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          target-folder: examples-vite
+          clean: true

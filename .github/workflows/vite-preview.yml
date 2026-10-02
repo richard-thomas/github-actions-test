@@ -45,5 +45,5 @@ jobs:
         with:
           source-dir: dist
           # Explicitly nesting them inside "preview/" root folder
-          target-dir: preview/pr-${{ github.event.number }}
+          target-dir: preview
           pr-per-commit: false
